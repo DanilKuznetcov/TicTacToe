@@ -46,8 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\fiealdStates.cs" />
+    <Compile Include="Model\GameModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="View\customButtons.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\gameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,7 +79,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
     <Folder Include="Sources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

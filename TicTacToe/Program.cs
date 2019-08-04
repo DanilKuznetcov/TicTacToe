@@ -1,4 +1,6 @@
 ﻿using System;
+using TicTacToe.View;
+using TicTacToe.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +18,8 @@ namespace TicTacToe
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new View.gameForm());
+            var gameModel = new GameModel();
+            Application.Run(new gameForm(gameModel));
         }
     }
 }

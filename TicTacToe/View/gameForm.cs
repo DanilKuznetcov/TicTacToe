@@ -6,19 +6,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TicTacToe.Model;
 
 namespace TicTacToe.View
 {
     class gameForm : Form
     {
         TableLayoutPanel table = new TableLayoutPanel();
-        public gameForm()
+        GameModel gameModel;
+
+        public gameForm(GameModel gameModel)
         {
             InitialForm();
             InitialTable();
-
-            this.MouseDown += Form_MouseDown;
-            this.MouseMove += Form_MouseMove;
+            this.gameModel = gameModel;
+            InitialGameModelVisial();
+        }
+        void InitialGameModelVisial()
+        {
+            gameModel.markerSet += (row, column) =>
+            {
+                var button = table.GetControlFromPosition(row, column);
+                button.Text = gameModel.playerMarker;
+            };
         }
 
         void InitialForm()
@@ -32,6 +42,9 @@ namespace TicTacToe.View
             InitialMenuButtons();
 
             this.Controls.Add(table);
+
+            this.MouseDown += Form_MouseDown;
+            this.MouseMove += Form_MouseMove;
         }
         Point moveStart;
         void Form_MouseDown(object sender, MouseEventArgs e)
@@ -91,12 +104,12 @@ namespace TicTacToe.View
             this.Controls.Add(newGameButton);
 
 
-            var noughtChoiceButton = new ticTacToeMenuButton()
+            var circleChoiceButton = new ticTacToeMenuButton()
             {
                 Text = "◯"
             };
-            noughtChoiceButton.Location = new Point(Size.Width / 2 + 1 * noughtChoiceButton.Size.Width / 2 + 1, 100 - noughtChoiceButton.Size.Height);
-            this.Controls.Add(noughtChoiceButton);
+            circleChoiceButton.Location = new Point(Size.Width / 2 + 1 * circleChoiceButton.Size.Width / 2 + 1, 100 - circleChoiceButton.Size.Height);
+            this.Controls.Add(circleChoiceButton);
 
             Paint += (sender, args) =>
             {
@@ -126,39 +139,23 @@ namespace TicTacToe.View
 
         void SetButtons()
         {
-            for (int columns = 0; columns < 3; columns++)
+            for (int row = 0; row < 3; row++)
             {
                 table.RowStyles.Add(new RowStyle(SizeType.Percent, 33f));
                 table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33f));
-                for (int rows = 0; rows < 3; rows++)
+                for (int column = 0; column < 3; column++)
                 {
                     var gameButton = new ticTacToeButton();
-                    table.Controls.Add(gameButton, columns, rows);
+                    var currentRow = row;
+                    var currentColumn = column;
+                    gameButton.Click += (sender, args) =>
+                    {
+                        gameModel.SetMarker(currentRow, currentColumn);
+                    };
+                    table.Controls.Add(gameButton, column, row);
                 }
             }
 
-        }
-    }
-
-    class ticTacToeMenuButton : Button
-    {
-        public ticTacToeMenuButton()
-        {
-            this.TextAlign = ContentAlignment.MiddleCenter;
-            this.Size = new Size(40, 30);
-            this.Font = new Font("Times New Roman", 15, FontStyle.Regular);
-            this.ForeColor = Color.White;
-            this.TabStop = false;
-            this.FlatStyle = FlatStyle.Flat;
-            this.FlatAppearance.BorderSize = 0;
-        }
-    }
-
-    class ticTacToeButton : Button
-    {
-        public ticTacToeButton()
-        {
-            this.Dock = DockStyle.Fill;
         }
     }
 }
