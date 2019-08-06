@@ -24,18 +24,18 @@ namespace TicTacToe.View
         }
         void InitialGameModelVisial()
         {
-            gameModel.MarkerSet += (row, column) =>
+            gameModel.MarkerSet += (row, column, side) =>
             {
-                var button = table.GetControlFromPosition(row, column);
-                button.Text = gameModel.gameProgress % 2 == 0
+                var button = table.GetControlFromPosition(column, row);
+                button.Text = side == fiealdStates.cross
                                 ? "Ⅹ"
                                 : "◯";
             };
             gameModel.GameWin += (tupleWin) =>
             {
-                table.GetControlFromPosition(tupleWin.Item1.X, tupleWin.Item1.Y).ForeColor = Color.Gold;
-                table.GetControlFromPosition(tupleWin.Item2.X, tupleWin.Item2.Y).ForeColor = Color.Gold;
-                table.GetControlFromPosition(tupleWin.Item3.X, tupleWin.Item3.Y).ForeColor = Color.Gold;
+                table.GetControlFromPosition(tupleWin.Item1.Y, tupleWin.Item1.X).ForeColor = Color.Gold;
+                table.GetControlFromPosition(tupleWin.Item2.Y, tupleWin.Item2.X).ForeColor = Color.Gold;
+                table.GetControlFromPosition(tupleWin.Item3.Y, tupleWin.Item3.X).ForeColor = Color.Gold;
             };
         }
 
@@ -87,50 +87,73 @@ namespace TicTacToe.View
 
             using (GraphicsPath gp = new GraphicsPath())
             {
-                gp.AddEllipse(Location.X - 915, Location.Y - 150, 900, 500);
+                gp.AddRectangles(new Rectangle[] 
+                {
+                    new Rectangle(0, 100, 300, 300),
+                    new Rectangle(28, 50, 244, 50),
+                    new Rectangle(0, 75, 28, 25),
+                    new Rectangle(272, 75, 28, 25)
+                });
                 this.Region = new Region(gp);
             }
-
-
             base.OnPaint(e);
         }
 
         void InitialMenuButtons()
         {
+            var heightLevel = 100 - (new ticTacToeMenuButton()).Height;
             var crossChoiceButton = new ticTacToeMenuButton()
             {
-                Text = "◯"
+                Text = "Ⅹ",
+                Font = new Font("Times New Roman", 20, FontStyle.Bold),
+                TextAlign = ContentAlignment.BottomCenter
             };
-            crossChoiceButton.Location = new Point(Size.Width / 2 - 3 * crossChoiceButton.Size.Width / 2 - 1, 100 - crossChoiceButton.Size.Height);
+            crossChoiceButton.Click += (seder, args) =>
+            {
+                gameModel.playerSide = gameModel.enemySide;
+                crossChoiceButton.Text = gameModel.playerSide == fiealdStates.cross
+                                ? "Ⅹ"
+                                : "◯";
+                gameModel.Reset();
+                foreach (var control in table.Controls)
+                {
+                    ((Button)control).Text = "";
+                    ((Button)control).ForeColor = Color.White;
+                }
+                if (gameModel.playerSide == fiealdStates.circle)
+                    gameModel.MoveAI();
+            };
+            crossChoiceButton.Location = new Point(Size.Width / 2 - 3 * crossChoiceButton.Size.Width / 2 - 1, heightLevel);
             this.Controls.Add(crossChoiceButton);
 
             var newGameButton = new ticTacToeMenuButton()
             {
                 Text = "↺"
             };
-            newGameButton.Click += (senger, args) =>
-            {
-                gameModel.Reset();
-                gameModel.gameProgress = 0;
-                foreach (var control in table.Controls)
+            newGameButton.Click += (sender, args) =>
                 {
-                    ((Button)control).Text = "";
-                    ((Button)control).ForeColor = Color.White;
-                }
-            };
-            newGameButton.Location = new Point(Size.Width / 2 - 1 * newGameButton.Size.Width / 2, 100 - newGameButton.Size.Height);
-            this.Controls.Add(newGameButton);
+                    gameModel.Reset();
+                    foreach (var control in table.Controls)
+                    {
+                        ((Button)control).Text = "";
+                        ((Button)control).ForeColor = Color.White;
 
+                    }
+                    if (gameModel.playerSide == fiealdStates.circle)
+                        gameModel.MoveAI();
+                };
+            newGameButton.Location = new Point(Size.Width / 2 - 1 * newGameButton.Size.Width / 2, heightLevel);
+            this.Controls.Add(newGameButton);
 
             var circleChoiceButton = new ticTacToeMenuButton()
             {
-                Text = "Ⅹ"
+                Text = "Ⓧ"
             };
             circleChoiceButton.Click += (sender, args) =>
             {
                 this.Close();
             };
-            circleChoiceButton.Location = new Point(Size.Width / 2 + 1 * circleChoiceButton.Size.Width / 2 + 1, 100 - circleChoiceButton.Size.Height);
+            circleChoiceButton.Location = new Point(Size.Width / 2 + 1 * circleChoiceButton.Size.Width / 2 + 1, heightLevel);
             this.Controls.Add(circleChoiceButton);
 
             Paint += (sender, args) =>

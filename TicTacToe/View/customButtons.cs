@@ -13,9 +13,9 @@ namespace TicTacToe.View
     {
         public ticTacToeMenuButton()
         {
-            this.TextAlign = ContentAlignment.MiddleCenter;
-            this.Size = new Size(40, 30);
-            this.Font = new Font("Times New Roman", 15, FontStyle.Regular);
+            this.TextAlign = ContentAlignment.TopCenter;
+            this.Size = new Size(80, 50);
+            this.Font = new Font("Times New Roman", 30, FontStyle.Bold);
             this.ForeColor = Color.White;
             this.TabStop = false;
             this.FlatStyle = FlatStyle.Flat;
