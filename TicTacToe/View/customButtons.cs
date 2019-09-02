@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace TicTacToe.View
 {
 
-    class ticTacToeMenuButton : Button
+    class TicTacToeMenuButton : Button
     {
-        public ticTacToeMenuButton()
+        public TicTacToeMenuButton()
         {
             this.TextAlign = ContentAlignment.TopCenter;
             this.Size = new Size(80, 50);
@@ -23,9 +23,9 @@ namespace TicTacToe.View
         }
     }
 
-    class ticTacToeButton : Button
+    class TicTacToeButton : Button
     {
-        public ticTacToeButton()
+        public TicTacToeButton()
         {
             this.Dock = DockStyle.Fill;
             this.Font = new Font("Montserrat Thin", 60, FontStyle.Regular);

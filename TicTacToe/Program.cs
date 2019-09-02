@@ -19,7 +19,7 @@ namespace TicTacToe
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             var gameModel = new GameModel();
-            Application.Run(new gameForm(gameModel));
+            Application.Run(new GameForm(gameModel));
         }
     }
 }

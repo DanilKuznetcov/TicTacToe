@@ -9,18 +9,18 @@ namespace TicTacToe.Model
 {
     class GameModel
     {
-        public event Action<int, int, fiealdStates> MarkerSet;
+        public event Action<int, int, FiealdStates> MarkerSet;
         public event Action<Tuple<Point, Point, Point>> GameWin;
         ArtificialIntellect AI;
         int gameProgress;
 
         GameField gameField;
-        public fiealdStates playerSide = fiealdStates.cross;
-        public fiealdStates enemySide
+        public FiealdStates playerSide = FiealdStates.cross;
+        public FiealdStates EnemySide
         {
-            get => (playerSide == fiealdStates.cross)
-                                ? fiealdStates.circle
-                                : fiealdStates.cross;
+            get => (playerSide == FiealdStates.cross)
+                                ? FiealdStates.circle
+                                : FiealdStates.cross;
         }
 
         bool AIMove { get => (gameProgress % 2 == (int)playerSide % 2); }
@@ -33,7 +33,7 @@ namespace TicTacToe.Model
 
         public void SetMarker(int row, int column)
         {
-            if (gameField[row, column] == fiealdStates.empty && !gameField.IsEnd())
+            if (gameField[row, column] == FiealdStates.empty && !gameField.IsEnd())
             {
                 gameField[row, column] = playerSide;
                 MarkerSet(row, column, playerSide);
@@ -48,12 +48,12 @@ namespace TicTacToe.Model
         {
             if (!gameField.IsEnd())
             {
-                var nextMove = AI.NextMove(gameField, enemySide);
+                var nextMove = AI.NextMove(gameField, EnemySide);
                 var row = nextMove.Item1;
                 var column = nextMove.Item2;
-                gameField[row, column] = enemySide;
+                gameField[row, column] = EnemySide;
                 SetMarker(row, column);
-                MarkerSet(row, column, enemySide);
+                MarkerSet(row, column, EnemySide);
                 if (gameField.IsWin())
                     GameWin(gameField.winTuple);
                 gameProgress++;
@@ -66,7 +66,7 @@ namespace TicTacToe.Model
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++)
                 {
-                    gameField[i, j] = fiealdStates.empty;
+                    gameField[i, j] = FiealdStates.empty;
                 }
         }
     }

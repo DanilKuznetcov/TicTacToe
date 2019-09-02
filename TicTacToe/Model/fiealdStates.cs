@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.Model
 {
-    enum fiealdStates
+    enum FiealdStates
     {
         empty,
         cross,

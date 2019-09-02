@@ -9,9 +9,9 @@ namespace TicTacToe.Model
 {
     class GameField : IEnumerable<string>
     {
-        fiealdStates[,] gameField;
+        readonly FiealdStates[,] gameField;
 
-        public fiealdStates this[int row, int column]
+        public FiealdStates this[int row, int column]
         {
             get => gameField[row, column];
             set => gameField[row, column] = value;
@@ -19,12 +19,12 @@ namespace TicTacToe.Model
 
         public GameField()
         {
-            gameField = new fiealdStates[3, 3];
+            gameField = new FiealdStates[3, 3];
         }
 
-        public GameField(fiealdStates[,] fiealdStates)
+        public GameField(FiealdStates[,] fiealdStates)
         {
-            gameField = new fiealdStates[3, 3];
+            gameField = new FiealdStates[3, 3];
             for (int i = 0; i < 3; i++)
                 for (int j = 0; j < 3; j++)
                     gameField[i, j] = fiealdStates[i, j];
@@ -39,9 +39,9 @@ namespace TicTacToe.Model
                 for (int j = 0; j < 3; j++)
                 {
                     var mark = '-';
-                    if (gameField[i, j] == fiealdStates.cross)
+                    if (gameField[i, j] == FiealdStates.cross)
                         mark = 'x';
-                    else if (gameField[i, j] == fiealdStates.circle)
+                    else if (gameField[i, j] == FiealdStates.circle)
                         mark = 'o';
                     result[i].Append(mark);
                 }
@@ -68,7 +68,7 @@ namespace TicTacToe.Model
                 return true;
             else
                 foreach (var state in gameField)
-                    if (state == fiealdStates.empty)
+                    if (state == FiealdStates.empty)
                         return false;
             return true;
         }
@@ -85,14 +85,14 @@ namespace TicTacToe.Model
         }
         bool CheckWinRowAndColumn(int startIndex)
         {
-            if (gameField[0, startIndex] != fiealdStates.empty
+            if (gameField[0, startIndex] != FiealdStates.empty
                 && gameField[0, startIndex] == gameField[1, startIndex]
                 && gameField[0, startIndex] == gameField[2, startIndex])
             {
                 winTuple = Tuple.Create(new Point(0, startIndex), new Point(1, startIndex), new Point(2, startIndex));
                 return true;
             }
-            else if (gameField[startIndex, 0] != fiealdStates.empty
+            else if (gameField[startIndex, 0] != FiealdStates.empty
                     && gameField[startIndex, 0] == gameField[startIndex, 1]
                     && gameField[startIndex, 0] == gameField[startIndex, 2])
             {
@@ -103,14 +103,14 @@ namespace TicTacToe.Model
         }
         bool CheckWinDiagonals()
         {
-            if (gameField[0, 0] != fiealdStates.empty
+            if (gameField[0, 0] != FiealdStates.empty
                 && gameField[0, 0] == gameField[1, 1]
                 && gameField[0, 0] == gameField[2, 2])
             {
                 winTuple = Tuple.Create(new Point(0, 0), new Point(1, 1), new Point(2, 2));
                 return true;
             }
-            else if (gameField[0, 2] != fiealdStates.empty
+            else if (gameField[0, 2] != FiealdStates.empty
                     && gameField[0, 2] == gameField[1, 1]
                     && gameField[0, 2] == gameField[2, 0])
             {
@@ -128,15 +128,15 @@ namespace TicTacToe.Model
         public void SetAndGet()
         {
             var actual = new GameField();
-            actual[1, 1] = fiealdStates.cross;
-            Assert.AreEqual(fiealdStates.cross, actual[1, 1]);
+            actual[1, 1] = FiealdStates.cross;
+            Assert.AreEqual(FiealdStates.cross, actual[1, 1]);
         }
         [Test]
         public void VisualForDebugger()
         {
             var actual = new GameField();
-            actual[1, 1] = fiealdStates.cross;
-            actual[2, 2] = fiealdStates.circle;
+            actual[1, 1] = FiealdStates.cross;
+            actual[2, 2] = FiealdStates.circle;
             var expected = new List<string> { "---", "-x-", "--o" };
             Assert.AreEqual(expected, actual);
         }

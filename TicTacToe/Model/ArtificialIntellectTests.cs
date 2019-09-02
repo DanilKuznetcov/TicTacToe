@@ -54,13 +54,7 @@ namespace TicTacToe.Model
                     ..x",
                     2, 0,
                     TestName = "SecondWinningSituationWithRotation")]
-        [TestCase(@"
-                    ..0
-                    .x.
-                    0..",
-                    0, 2,
-                    TestName = "EnemyWinningSituation")]
-        public void CheckTacticTest(string data, int expectedRow, int expectedColumn, fiealdStates side = fiealdStates.cross)
+        public void CheckTacticTest(string data, int expectedRow, int expectedColumn, FiealdStates side = FiealdStates.cross)
         {
             var field = ParseField(data);
             var actualPoint = AI.NextMove(field, side);
@@ -80,18 +74,39 @@ namespace TicTacToe.Model
         public void CheckRandom(string data)
         {
             var gameField = ParseField(data);
-            var actualFirst = AI.NextMove(gameField, fiealdStates.cross);
-            var actualSecond = AI.NextMove(gameField, fiealdStates.cross);
+            var actualFirst = AI.NextMove(gameField, FiealdStates.cross);
+            var actualSecond = AI.NextMove(gameField, FiealdStates.cross);
             var count = 10;
             while (actualFirst.Equals(actualSecond) || count > 0)
             {
-                actualFirst = AI.NextMove(gameField, fiealdStates.cross);
-                actualSecond = AI.NextMove(gameField, fiealdStates.cross);
+                actualFirst = AI.NextMove(gameField, FiealdStates.cross);
+                actualSecond = AI.NextMove(gameField, FiealdStates.cross);
                 count--;
             }
             Assert.AreNotEqual(actualFirst, actualSecond);
         }
-        
+
+        [Test]
+        public void AIvsAI()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                var gameField = new GameField();
+                var rnd = new Random();
+                var AISide = (rnd.Next(0, 2) == 1) ? FiealdStates.cross : FiealdStates.circle;
+
+                while (!gameField.IsEnd())
+                {
+                    var move = AI.NextMove(gameField, AISide);
+                    gameField[move.Item1, move.Item2] = AISide;
+                    AISide = (AISide == FiealdStates.cross)
+                                ? FiealdStates.circle
+                                : FiealdStates.cross;
+                }
+                Assert.True(!gameField.IsWin());
+            }
+        }
+
         public static GameField ParseField(string input)
         {
             var data = input.Split('\r', '\n');
@@ -101,9 +116,9 @@ namespace TicTacToe.Model
                 for (int j = 0; j < 3; j++)
                 {
                     if (data[i][j] == 'x')
-                        resultField[i, j] = fiealdStates.cross;
+                        resultField[i, j] = FiealdStates.cross;
                     else if (data[i][j] == '0')
-                        resultField[i, j] = fiealdStates.circle;
+                        resultField[i, j] = FiealdStates.circle;
                 }
             return resultField;
         }

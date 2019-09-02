@@ -10,12 +10,12 @@ using TicTacToe.Model;
 
 namespace TicTacToe.View
 {
-    class gameForm : Form
+    class GameForm : Form
     {
         TableLayoutPanel table = new TableLayoutPanel();
         GameModel gameModel;
 
-        public gameForm(GameModel gameModel)
+        public GameForm(GameModel gameModel)
         {
             InitialForm();
             InitialTable();
@@ -27,7 +27,7 @@ namespace TicTacToe.View
             gameModel.MarkerSet += (row, column, side) =>
             {
                 var button = table.GetControlFromPosition(column, row);
-                button.Text = side == fiealdStates.cross
+                button.Text = side == FiealdStates.cross
                                 ? "Ⅹ"
                                 : "◯";
             };
@@ -87,22 +87,17 @@ namespace TicTacToe.View
 
             using (GraphicsPath gp = new GraphicsPath())
             {
-                gp.AddRectangles(new Rectangle[] 
-                {
-                    new Rectangle(0, 100, 300, 300),
-                    new Rectangle(28, 50, 244, 50),
-                    new Rectangle(0, 75, 28, 25),
-                    new Rectangle(272, 75, 28, 25)
-                });
+                gp.AddEllipse(-300, 50, 900, 500);
                 this.Region = new Region(gp);
             }
+            
             base.OnPaint(e);
         }
 
         void InitialMenuButtons()
         {
-            var heightLevel = 100 - (new ticTacToeMenuButton()).Height;
-            var crossChoiceButton = new ticTacToeMenuButton()
+            var heightLevel = 100 - (new TicTacToeMenuButton()).Height;
+            var crossChoiceButton = new TicTacToeMenuButton()
             {
                 Text = "Ⅹ",
                 Font = new Font("Times New Roman", 20, FontStyle.Bold),
@@ -110,8 +105,8 @@ namespace TicTacToe.View
             };
             crossChoiceButton.Click += (seder, args) =>
             {
-                gameModel.playerSide = gameModel.enemySide;
-                crossChoiceButton.Text = gameModel.playerSide == fiealdStates.cross
+                gameModel.playerSide = gameModel.EnemySide;
+                crossChoiceButton.Text = gameModel.playerSide == FiealdStates.cross
                                 ? "Ⅹ"
                                 : "◯";
                 gameModel.Reset();
@@ -120,13 +115,13 @@ namespace TicTacToe.View
                     ((Button)control).Text = "";
                     ((Button)control).ForeColor = Color.White;
                 }
-                if (gameModel.playerSide == fiealdStates.circle)
+                if (gameModel.playerSide == FiealdStates.circle)
                     gameModel.MoveAI();
             };
             crossChoiceButton.Location = new Point(Size.Width / 2 - 3 * crossChoiceButton.Size.Width / 2 - 1, heightLevel);
             this.Controls.Add(crossChoiceButton);
 
-            var newGameButton = new ticTacToeMenuButton()
+            var newGameButton = new TicTacToeMenuButton()
             {
                 Text = "↺"
             };
@@ -139,13 +134,13 @@ namespace TicTacToe.View
                         ((Button)control).ForeColor = Color.White;
 
                     }
-                    if (gameModel.playerSide == fiealdStates.circle)
+                    if (gameModel.playerSide == FiealdStates.circle)
                         gameModel.MoveAI();
                 };
             newGameButton.Location = new Point(Size.Width / 2 - 1 * newGameButton.Size.Width / 2, heightLevel);
             this.Controls.Add(newGameButton);
 
-            var circleChoiceButton = new ticTacToeMenuButton()
+            var circleChoiceButton = new TicTacToeMenuButton()
             {
                 Text = "Ⓧ"
             };
@@ -160,7 +155,7 @@ namespace TicTacToe.View
             {
                 var graphics = args.Graphics;
                 var pen = new Pen(Color.White, 1);
-                var menuButton = new ticTacToeMenuButton();
+                var menuButton = new TicTacToeMenuButton();
 
                 var start = new Point(Size.Width / 2 - menuButton.Size.Width / 2, 100 - menuButton.Height + 7);
                 var finish = new Point(Size.Width / 2 - menuButton.Size.Width / 2, 93);
@@ -190,7 +185,7 @@ namespace TicTacToe.View
                 table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 33f));
                 for (int column = 0; column < 3; column++)
                 {
-                    var gameButton = new ticTacToeButton();
+                    var gameButton = new TicTacToeButton();
                     var currentRow = row;
                     var currentColumn = column;
                     gameButton.Click += (sender, args) =>
