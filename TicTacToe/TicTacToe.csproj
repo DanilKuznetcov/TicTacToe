@@ -52,15 +52,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\ArtificialIntellect.cs" />
-    <Compile Include="Model\ArtificialIntellectTests.cs" />
+    <Compile Include="Model\Colors.cs" />
     <Compile Include="Model\ExtentionRandom.cs" />
     <Compile Include="Model\fiealdStates.cs" />
     <Compile Include="Model\GameField.cs" />
     <Compile Include="Model\GameModel.cs" />
+    <Compile Include="Model\Generator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\customButtons.cs">
+    <Compile Include="View\customObjects.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\gameForm.cs">

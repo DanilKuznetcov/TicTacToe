@@ -9,65 +9,57 @@ namespace TicTacToe.Model
 {
     class GameModel
     {
-        public event Action<int, int, FiealdStates> MarkerSet;
+        public event Action<GameField> MarkerSeted;
         public event Action<Tuple<Point, Point, Point>> GameWin;
-        ArtificialIntellect AI;
-        int gameProgress;
 
-        GameField gameField;
-        public FiealdStates playerSide = FiealdStates.cross;
-        public FiealdStates EnemySide
+        public GameField currentField;
+        public bool AIOpponent;
+        public FieldStates playerSide = FieldStates.cross;
+        public FieldStates enemySide
         {
-            get => (playerSide == FiealdStates.cross)
-                                ? FiealdStates.circle
-                                : FiealdStates.cross;
+            get => (playerSide == FieldStates.cross)
+                                ? FieldStates.circle
+                                : FieldStates.cross;
         }
-
-        bool AIMove { get => (gameProgress % 2 == (int)playerSide % 2); }
 
         public GameModel()
         {
-            gameField = new GameField();
-            AI = new ArtificialIntellect();
+            currentField = GameField.Root;
+            MarkerSeted += (gameField) =>
+            {
+                if (gameField.IsWin)
+                    GameWin(gameField.winTuple);
+            };
         }
 
-        public void SetMarker(int row, int column)
+        public void SetMarker(bool AIMove, int row = 0, int column = 0)
         {
-            if (gameField[row, column] == FiealdStates.empty && !gameField.IsEnd())
+            if (((AIOpponent && AIMove) || currentField[row, column] == FieldStates.empty) && !currentField.IsEnd)
             {
-                gameField[row, column] = playerSide;
-                MarkerSet(row, column, playerSide);
-                if (gameField.IsWin())
-                    GameWin(gameField.winTuple);
-                gameProgress++;
-                MoveAI();
-            }
-        }
-
-        public void MoveAI()
-        {
-            if (!gameField.IsEnd())
-            {
-                var nextMove = AI.NextMove(gameField, EnemySide);
-                var row = nextMove.Item1;
-                var column = nextMove.Item2;
-                gameField[row, column] = EnemySide;
-                SetMarker(row, column);
-                MarkerSet(row, column, EnemySide);
-                if (gameField.IsWin())
-                    GameWin(gameField.winTuple);
-                gameProgress++;
+                if (AIOpponent && AIMove)
+                {
+                    if (currentField.PosibleMoves.Where(field => field.winStrategy || field.IsWin).Count() > 0)
+                        currentField = currentField.PosibleMoves.Where(field => field.winStrategy || field.IsWin).RandomElement();
+                    else if (currentField.PosibleMoves.Where(field => !field.loseStrategy).Count() > 0)
+                        currentField = currentField.PosibleMoves.Where(field => !field.loseStrategy).RandomElement();
+                    else
+                        currentField = currentField.PosibleMoves.RandomElement();
+                    MarkerSeted(currentField);
+                }
+                else
+                {
+                    currentField = currentField.PosibleMoves.Where(field => field[row, column] != FieldStates.empty).First();
+                    if (!AIOpponent || currentField.IsEnd)
+                        MarkerSeted(currentField);
+                    else
+                        SetMarker(true);
+                }
             }
         }
 
         public void Reset()
         {
-            gameProgress = 0;
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                {
-                    gameField[i, j] = FiealdStates.empty;
-                }
+            currentField = GameField.Root;
         }
     }
 }

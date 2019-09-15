@@ -18,6 +18,7 @@ namespace TicTacToe
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Generator.Generate();
             var gameModel = new GameModel();
             Application.Run(new GameForm(gameModel));
         }
